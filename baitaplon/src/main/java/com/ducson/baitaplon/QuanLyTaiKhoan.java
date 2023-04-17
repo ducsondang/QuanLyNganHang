@@ -39,7 +39,7 @@ public class QuanLyTaiKhoan {
                 System.out.println("UserName da co nguoi su dung!\nVui long cung cap UserName khac");
             } else {
                 this.dsAccount.add(h);
-                h.LuuTaiKhoan();
+                h.saveAccount();
             }
 
         }
@@ -50,7 +50,7 @@ public class QuanLyTaiKhoan {
         if (f.delete()) {
             this.dsAccount.forEach(h -> {
                 try {
-                    h.LuuTaiKhoan();
+                    h.saveAccount();
                 } catch (IOException ex) {
                     Logger.getLogger(QuanLyTaiKhoan.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -86,8 +86,8 @@ public class QuanLyTaiKhoan {
                             System.out.println("Yeu cau Tai Khoan chinh phai có tren 100.000 VND");
                         }
                         if (a.getTaiKhoanGuiTien().getTien() > 100000) {
-                            a.moTaiKhoanKyHan();
-                        }
+                                a.moTaiKhoanKyHan();
+                            }
                         break;
                     case 4:
                         System.out.printf("Tien Lai Hang Thang Cua Quy Khach La: %.1f VND\n", a.getTaiKhoanGuiTien().tinhLaiXuat());
@@ -125,7 +125,7 @@ public class QuanLyTaiKhoan {
     public TaiKhoan timKiemTheoTaiKhoan(String tk) {
         return this.dsAccount.stream().filter(h -> h.getTaiKhoan().equals(tk)).findFirst().get();
     }
-    
+
     public List<TaiKhoan> timKiemTheoTen(String kw) {
         return this.dsAccount.stream().filter(h -> h.getHoTen().contains(kw)).collect(Collectors.toList());
     }

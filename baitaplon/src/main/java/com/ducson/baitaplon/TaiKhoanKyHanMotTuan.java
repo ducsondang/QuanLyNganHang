@@ -27,7 +27,6 @@ public class TaiKhoanKyHanMotTuan extends TaiKhoanKyHan{
         super.setLai(lai);
         super.setKyHan(kyHan);
         super.setNgayTao( CauHinh.f.parse(ngayTao));
-        this.LuuTaiKhoan();
     }
     
 

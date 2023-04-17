@@ -137,23 +137,35 @@ public class TaiKhoan {
             try ( Scanner sc = new Scanner(f)) {
                 while (sc.hasNext()) {
                     int ID = sc.nextInt();
-//                System.out.println(ID);
                     String idAccount = sc.next();
-//                System.out.println(idAccount);
                     double tien = sc.nextDouble();
-//                System.out.println(tien);
                     double lai = sc.nextDouble();
-//                System.out.println(lai);
-//                sc.nextLine();
                     String kyHan = sc.next();
-//                System.out.println(kyHan);
                     String ngayTao = sc.next();
-//                System.out.println(ngayTao);
                     if (sc.hasNext()) {
                         sc.nextLine();
+//                        System.out.println(this.getId());
+//                        System.out.println(idAccount);
                     }
-                    TaiKhoanKyHanMotTuan h = new TaiKhoanKyHanMotTuan(ID, idAccount, tien, lai, kyHan, ngayTao);
-                    this.dsKyHan.add(h);
+
+                    if (idAccount.equals(this.getId())) {
+                        if (lai == 2.0) {
+                            TaiKhoanKyHanMotTuan h = new TaiKhoanKyHanMotTuan(ID, idAccount, tien, lai, kyHan, ngayTao);
+                            this.dsKyHan.add(h);
+                        }
+                        if (lai == 5.5) {
+                            TaiKhoanKyHanMotThang h = new TaiKhoanKyHanMotThang(ID, idAccount, tien, lai, kyHan, ngayTao);
+                            this.dsKyHan.add(h);
+                        }
+                        if (lai == 7.5) {
+                            TaiKhoanKyHanSauThang h = new TaiKhoanKyHanSauThang(ID, idAccount, tien, lai, kyHan, ngayTao);
+                            this.dsKyHan.add(h);
+                        }
+                        if (lai == 7.9) {
+                            TaiKhoanKyHanMotNam h = new TaiKhoanKyHanMotNam(ID, idAccount, tien, lai, kyHan, ngayTao);
+                            this.dsKyHan.add(h);
+                        }
+                    }
                     this.setCheck(false);
                 }
             }
@@ -162,10 +174,14 @@ public class TaiKhoan {
     }
 
     public void hienThiTaiKhoanKyHan() {
-        this.getDsKyHan().forEach(a -> a.hienThi());
+        if (this.dsKyHan.isEmpty()) {
+            System.out.println("ban chua co tai khoan ky han");
+        } else {
+            this.getDsKyHan().forEach(a -> a.hienThi());
+        }
     }
 
-    public void LuuTaiKhoan() throws IOException {
+    public void saveAccount() throws IOException {
         File f = new File("src/main/resources/taikhoan.txt");
         FileWriter w = new FileWriter(f, true);
         try ( PrintWriter t = new PrintWriter(w)) {
