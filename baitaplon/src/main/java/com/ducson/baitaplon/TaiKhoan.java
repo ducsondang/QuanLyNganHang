@@ -30,7 +30,7 @@ public class TaiKhoan {
     private Date ngaySinh;
     private String queQuan;
     private int CCCD;
-    private String taiKhoan;
+    private String account;
     private String matKhau;
     private String id;
     private TaiKhoanGuiTien taiKhoanGuiTien;
@@ -60,7 +60,7 @@ public class TaiKhoan {
         this.queQuan = Que;
         this.id = id;
         this.matKhau = passwork;
-        this.taiKhoan = taiKhoan;
+        this.account = taiKhoan;
         this.taiKhoanGuiTien.setNgayTao(CauHinh.f.parse(ngay));
     }
 
@@ -79,12 +79,12 @@ public class TaiKhoan {
             // code xử lý ngoại lệ
         }
         this.setNgaySinh(ngaySinh);
-        System.out.println("gioi Tinh: ");
+        System.out.print("Gioi Tinh: ");
         this.setGioiTinh(CauHinh.sc.nextLine());
-        System.out.println("Que Quan: ");
+        System.out.print("Que Quan: ");
         this.setQueQuan(CauHinh.sc.nextLine());
-        System.out.print("tai khoan: ");
-        this.setTaiKhoan(CauHinh.sc.next());
+        System.out.print("Tai khoan: ");
+        this.setAccount(CauHinh.sc.next());
         System.out.print("CCCD: ");
         this.setCCCD(CauHinh.sc.nextInt());
         System.out.print("Tien Gui(VND): ");
@@ -96,7 +96,7 @@ public class TaiKhoan {
 
     public void hienThi() {
         System.out.println("=======================");
-        System.out.printf("ID: %s\nHo va ten: %s\nNgay Sinh: %s\nTai Khoan: %s\nSo tien: %s\n", this.getId(), this.getHoTen(), CauHinh.f.format(this.getNgaySinh()), this.getTaiKhoan(), this.getTaiKhoanGuiTien().getTien());
+        System.out.printf("ID: %s\nHo va ten: %s\nNgay Sinh: %s\nTai Khoan: %s\nSo tien tai khoan thanh toan: %.1f VND\nTong tien: %.1f VND\n", this.getId(), this.getHoTen(), CauHinh.f.format(this.getNgaySinh()), this.getAccount(), this.getTaiKhoanGuiTien().getTien(),this.tinhTongTien());
     }
 
     public void moTaiKhoanKyHan() throws IOException {
@@ -115,22 +115,21 @@ public class TaiKhoan {
         if (number == 2) {
             TaiKhoanKyHanMotThang a = new TaiKhoanKyHanMotThang(this.dsKyHan.size(), this.getId());
             this.getDsKyHan().add(a);
-
         }
         if (number == 3) {
             TaiKhoanKyHanSauThang a = new TaiKhoanKyHanSauThang(this.dsKyHan.size(), this.getId());
             this.getDsKyHan().add(a);
-
         }
         if (number == 4) {
             TaiKhoanKyHanMotNam a = new TaiKhoanKyHanMotNam(this.dsKyHan.size(), this.getId());
             this.getDsKyHan().add(a);
-
         } else {
             System.out.println("Nhap sai vui long nhap lai");
         }
     }
-
+    /**
+     * lấy dữ liệu tài khoản kỳ hạn từ file taikhoankyhan.txt
+     */
     public void nhapTaiKhoanKyHan(String path) throws FileNotFoundException, ParseException, IOException {
         if (this.isCheck() == true) {
             File f = new File(path);
@@ -144,11 +143,8 @@ public class TaiKhoan {
                     String ngayTao = sc.next();
                     if (sc.hasNext()) {
                         sc.nextLine();
-//                        System.out.println(this.getId());
-//                        System.out.println(idAccount);
                     }
-
-                    if (idAccount.equals(this.getId())) {
+                    if (idAccount.equals(this.getId())) { // kiểm tra tài khoản kỳ hạn của account
                         if (lai == 2.0) {
                             TaiKhoanKyHanMotTuan h = new TaiKhoanKyHanMotTuan(ID, idAccount, tien, lai, kyHan, ngayTao);
                             this.dsKyHan.add(h);
@@ -180,7 +176,10 @@ public class TaiKhoan {
             this.getDsKyHan().forEach(a -> a.hienThi());
         }
     }
-
+    /**
+     * 
+     *
+     */
     public void saveAccount() throws IOException {
         File f = new File("src/main/resources/taikhoan.txt");
         FileWriter w = new FileWriter(f, true);
@@ -188,7 +187,7 @@ public class TaiKhoan {
             t.println(this.getId());
             t.println(this.getHoTen());
             t.println(this.getGioiTinh());
-            t.println(this.getTaiKhoan());
+            t.println(this.getAccount());
             t.println(CauHinh.f.format(this.getNgaySinh()));
             t.println(this.getQueQuan());
             t.println(this.getCCCD());
@@ -238,6 +237,14 @@ public class TaiKhoan {
 
         }
 
+    }
+    
+    public double tinhTongTien(){
+        double a = 0;
+        for(int i =0; i <this.getDsKyHan().size();i++){
+            a += this.getDsKyHan().get(i).getTien();
+        }
+        return this.getTaiKhoanGuiTien().getTien()+ a;
     }
 
     public TaiKhoanKyHan getTaiKhoanKyHan(int id) {
@@ -352,15 +359,15 @@ public class TaiKhoan {
     /**
      * @return the taiKhoan
      */
-    public String getTaiKhoan() {
-        return taiKhoan;
+    public String getAccount() {
+        return account;
     }
 
     /**
      * @param taiKhoan the taiKhoan to set
      */
-    public void setTaiKhoan(String taiKhoan) {
-        this.taiKhoan = taiKhoan;
+    public void setAccount(String taiKhoan) {
+        this.account = taiKhoan;
     }
 
     /**

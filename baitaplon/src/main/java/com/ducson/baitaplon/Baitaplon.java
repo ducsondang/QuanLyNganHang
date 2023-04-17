@@ -17,7 +17,8 @@ public class Baitaplon {
 
     public static void main(String[] args) throws ParseException, FileNotFoundException, IOException {
         QuanLyTaiKhoan dstk = new QuanLyTaiKhoan();
-        dstk.nhapTaiKhoan("src/main/resources/taikhoan.txt");
+        dstk.nhapAccount("src/main/resources/taikhoan.txt");
+        dstk.nhapTaiKhoanKyHan();
         boolean cont = true;
         do {
             System.out.println("-----MENU-----\n1: Tao tai khoan\n2: Dang Nhap\n3: Tinh Tien Lai\n4: Gui rut tien\n5: Tra cuu khach hang theo ho ten\n6: Tra cuu khach hang theo ma so khach hang\n7: Danh sach tai khoan\n8: Sap xep danh sach");
@@ -37,7 +38,7 @@ public class Baitaplon {
                 case "3":
                     System.out.println("Nhap Tai Khoan");
                     String tk = CauHinh.sc.next();
-                    System.out.printf("Lai Xuat Hang Thang Cua Tai Khoan %s\n%.1f VND\n", dstk.timKiemTheoTaiKhoan(tk).getTaiKhoan(), dstk.timKiemTheoTaiKhoan(tk).getTaiKhoanGuiTien().tinhLaiXuat());
+                    System.out.printf("Lai Xuat Hang Thang Cua Tai Khoan %s\n%.1f VND\n", dstk.timKiemTheoTaiKhoan(tk).getAccount(), dstk.timKiemTheoTaiKhoan(tk).getTaiKhoanGuiTien().tinhLaiXuat());
                     break;
                 case "4":
                     System.out.println("Nhap Tai Khoan");

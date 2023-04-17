@@ -52,7 +52,9 @@ public class TaiKhoanGuiTien {
     public double tinhLaiXuat() {
         return this.getTien() / 100 * this.getLai();
     }
-
+    /**
+     * ???
+     */
     public double congLaiXuat(int han) {
         if ((new Date().getTime() - this.getNgayTao().getTime()) / (24 * 3600 * 1000) >= han) {
             int h = (int) (((new Date().getTime() - this.getNgayTao().getTime()) / (24 * 3600 * 1000)) / han);
