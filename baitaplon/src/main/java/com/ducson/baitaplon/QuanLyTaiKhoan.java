@@ -58,7 +58,7 @@ public class QuanLyTaiKhoan {
         }
     }
 
-    public void dangNhap(String userName, String pass) throws ParseException {
+    public void dangNhap(String userName, String pass) throws ParseException, FileNotFoundException, IOException {
         if (this.dsAccount.stream().filter(t -> t.getTaiKhoan().equals(userName)).findFirst().isEmpty() == false) {
             TaiKhoan a = this.dsAccount.stream().filter(t -> t.getTaiKhoan().equals(userName)).findFirst().get();
             if (this.dsAccount.stream().filter(t -> t.getTaiKhoan().equals(userName)).findFirst().isEmpty() == false && a.getMatKhau().equals(pass) == true) {
@@ -67,6 +67,7 @@ public class QuanLyTaiKhoan {
                 System.out.println("====================");
                 System.out.println("1: Doi mat khau\n2: Them tai khoan co ky han\n3: Rut Tien\n4: Xem Lai Xuat\n5: Danh Sach tai khoan ky han:\n6: Nap Tien Vao Tai Khoan ky han");
                 int numble = CauHinh.sc.nextInt();
+                a.nhapTaiKhoanKyHan("src/main/resources/taikhoankyhan.txt");
                 switch (numble) {
                     case 1:
                         System.out.println("Nhap mat khau moi");

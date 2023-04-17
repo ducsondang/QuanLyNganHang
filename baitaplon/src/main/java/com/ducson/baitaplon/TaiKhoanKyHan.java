@@ -5,58 +5,45 @@
 package com.ducson.baitaplon;
 
 import com.ducson.cauhinh.CauHinh;
-import java.text.ParseException;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
-import java.util.Random;
 
 /**
  *
  * @author khach
  */
-public class TaiKhoanKyHan extends TaiKhoanGuiTien {
+public abstract class TaiKhoanKyHan extends TaiKhoanGuiTien {
 
-    private static String id;
+    private int id;
     private Date ngayTao = new Date();
     private String kyHan;
+    private String idAccount;
 
-    {
-        setId(getId() + 1);
-    }
+    /**
+     *
+     *
+     * @return
+     */
+    public abstract Date tinhNgayDaoHan();
 
-    public TaiKhoanKyHan() {
-        System.out.println("Ky han cua tai khoan\n1: 1 Tuan: 2%/Nam\n2: 1 Thang: 5.5%/Nam\n3: 6 Thang: 7.5%/Nam\n4: 12 Thang: 7.9%/Nam\n");
-        String str = CauHinh.sc.next();
-        int number = 0;
-        try {
-            number = Integer.parseInt(str);
-        } catch (Exception ex) {
-            // code xử lý ngoại lệ
-        }
-        if (number == 1) {
-            this.setLai(2.0);
-            this.setKyHan("1 Tuan");
-        }
-        if (number == 2) {
-            this.setLai(5.5);
-            this.setKyHan("1 Thang");
-
-        }
-        if (number == 3) {
-            this.setLai(7.5);
-            this.setKyHan("6 Thang");
-
-        }
-        if (number == 4) {
-            this.setLai(7.9);
-            this.setKyHan("12Thang");
-
-        }else{
-            System.out.println("Nhap sai vui long nhap lai");
+    public void LuuTaiKhoan() throws IOException {
+        File f = new File("src/main/resources/taikhoankyhan.txt");
+        FileWriter w = new FileWriter(f, true);
+        try ( PrintWriter t = new PrintWriter(w)) {
+            t.println(this.getId());
+            t.println(this.getIdAccount());
+            t.println(this.getTien());
+            t.println(this.getLai());
+            t.println(this.getKyHan());
+            t.println(CauHinh.f.format(this.getNgayTao()));
         }
     }
 
     public void hienThi() {
-        System.out.printf("ID: %s\nKy Han: %s\nLai Xuat: %s\nSo Tien: %sVND\n", this.getId(), this.getKyHan(), this.getLai(),this.getTien());
+        System.out.printf("ID: %s\nID Account: %s\nKy Han: %s\nLai Xuat: %s\nSo Tien: %sVND\nNgay Dao Han : %s\n", this.getId(), this.idAccount, this.getKyHan(), this.getLai(), this.getTien(), CauHinh.f.format(this.tinhNgayDaoHan()));
     }
 
     /**
@@ -76,24 +63,29 @@ public class TaiKhoanKyHan extends TaiKhoanGuiTien {
     /**
      * @return the id
      */
-    public String getId() {
+    public int getId() {
         return id;
     }
 
     /**
-     * @param aId the id to set
+     * @param id the id to set
      */
-    public void setId(String aId) {
-        this.id = aId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
-     * @param aId the id to set
+     * @return the idAccount
      */
+    public String getIdAccount() {
+        return idAccount;
+    }
+
     /**
-     * @return the ngayTao
+     * @param idAccount the idAccount to set
      */
-    /**
-     * @return the soThuTu
-     */
+    public void setIdAccount(String idAccount) {
+        this.idAccount = idAccount;
+    }
+
 }

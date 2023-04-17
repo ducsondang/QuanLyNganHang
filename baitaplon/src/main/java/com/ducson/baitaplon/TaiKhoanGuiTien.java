@@ -13,14 +13,17 @@ import java.util.Date;
 public class TaiKhoanGuiTien {
 
     private double tien = 0;
-    private double lai = 0.2;
-    private Date ngayTao;
+    private double lai;
+    private Date ngayTao = new Date();
 
     /**
      * @return the tien
      */
     public double getTien() {
         return tien;
+    }
+    public TaiKhoanGuiTien(){
+        this.setLai(0.2);
     }
 
     /**
@@ -84,5 +87,6 @@ public class TaiKhoanGuiTien {
     public void setNgayTao(Date ngayTao) {
         this.ngayTao = ngayTao;
     }
+
 
 }

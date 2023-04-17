@@ -6,6 +6,7 @@ package com.ducson.baitaplon;
 
 import com.ducson.cauhinh.CauHinh;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  *
@@ -25,7 +27,7 @@ public class TaiKhoan {
     private String soThuTu;
     private String hoTen;
     private String gioiTinh;
-    Date ngaySinh;
+    private Date ngaySinh;
     private String queQuan;
     private int CCCD;
     private String taiKhoan;
@@ -33,6 +35,7 @@ public class TaiKhoan {
     private String id;
     private TaiKhoanGuiTien taiKhoanGuiTien;
     private List<TaiKhoanKyHan> dsKyHan = new ArrayList<>();
+    private boolean check = true;
 
     {
         if (getDem() >= 100 && getDem() < 999) {
@@ -96,13 +99,70 @@ public class TaiKhoan {
         System.out.printf("ID: %s\nHo va ten: %s\nNgay Sinh: %s\nTai Khoan: %s\nSo tien: %s\n", this.getId(), this.getHoTen(), CauHinh.f.format(this.getNgaySinh()), this.getTaiKhoan(), this.getTaiKhoanGuiTien().getTien());
     }
 
-    public void moTaiKhoanKyHan() {
-        TaiKhoanKyHan a = new TaiKhoanKyHan();
-        this.dsKyHan.add(a);
+    public void moTaiKhoanKyHan() throws IOException {
+        System.out.println("Ky han cua tai khoan\n1: 1 Tuan: 2%/Nam\n2: 1 Thang: 5.5%/Nam\n3: 6 Thang: 7.5%/Nam\n4: 12 Thang: 7.9%/Nam\n");
+        String str = CauHinh.sc.next();
+        int number = 0;
+        try {
+            number = Integer.parseInt(str);
+        } catch (Exception ex) {
+            // code xử lý ngoại lệ
+        }
+        if (number == 1) {
+            TaiKhoanKyHanMotTuan a = new TaiKhoanKyHanMotTuan(this.dsKyHan.size(), this.getId());
+            this.getDsKyHan().add(a);
+        }
+        if (number == 2) {
+            TaiKhoanKyHanMotThang a = new TaiKhoanKyHanMotThang(this.dsKyHan.size(), this.getId());
+            this.getDsKyHan().add(a);
+
+        }
+        if (number == 3) {
+            TaiKhoanKyHanSauThang a = new TaiKhoanKyHanSauThang(this.dsKyHan.size(), this.getId());
+            this.getDsKyHan().add(a);
+
+        }
+        if (number == 4) {
+            TaiKhoanKyHanMotNam a = new TaiKhoanKyHanMotNam(this.dsKyHan.size(), this.getId());
+            this.getDsKyHan().add(a);
+
+        } else {
+            System.out.println("Nhap sai vui long nhap lai");
+        }
+    }
+
+    public void nhapTaiKhoanKyHan(String path) throws FileNotFoundException, ParseException, IOException {
+        if (this.isCheck() == true) {
+            File f = new File(path);
+            try ( Scanner sc = new Scanner(f)) {
+                while (sc.hasNext()) {
+                    int ID = sc.nextInt();
+//                System.out.println(ID);
+                    String idAccount = sc.next();
+//                System.out.println(idAccount);
+                    double tien = sc.nextDouble();
+//                System.out.println(tien);
+                    double lai = sc.nextDouble();
+//                System.out.println(lai);
+//                sc.nextLine();
+                    String kyHan = sc.next();
+//                System.out.println(kyHan);
+                    String ngayTao = sc.next();
+//                System.out.println(ngayTao);
+                    if (sc.hasNext()) {
+                        sc.nextLine();
+                    }
+                    TaiKhoanKyHanMotTuan h = new TaiKhoanKyHanMotTuan(ID, idAccount, tien, lai, kyHan, ngayTao);
+                    this.dsKyHan.add(h);
+                    this.setCheck(false);
+                }
+            }
+
+        }
     }
 
     public void hienThiTaiKhoanKyHan() {
-        this.dsKyHan.forEach(a -> a.hienThi());
+        this.getDsKyHan().forEach(a -> a.hienThi());
     }
 
     public void LuuTaiKhoan() throws IOException {
@@ -122,39 +182,50 @@ public class TaiKhoan {
         }
     }
 
-//    public double tinhLaiXuat() {
-//        return this.tienGui / 100 * this.laiXuat / 12;
-//    }
-//
-//    public void congLaiXuat() {
-//        if (new Date().getTime() - this.ngayTao.getTime() == 30) {
-//            this.tien = this.tinhLaiXuat() + this.tienGui;
-//        }
-//    }
-    
+    /**
+     * chức năng chuyển tiền từ tài khoản chính vào tài khoản kì hạn vào ngày
+     * đáo hạn
+     *
+     */
     public void napTienVaoTKKyHan() {
-        System.out.println("Nhap ID Tai Khoan co ky han");
+        System.out.println("Nhap ID Tai Khoan ky han");
         String strId = CauHinh.sc.next();
         int number = 0;
+        System.out.println(new Date(CauHinh.f.format(new Date())));
         try {
             number = Integer.parseInt(strId);
         } catch (Exception ex) {
             // code xử lý ngoại lệ
         }
-        System.out.println("Nhap so tien");
-        String strMoney = CauHinh.sc.next();
-        double money = 0;
-        try {
-            money = Integer.parseInt(strMoney);
-        } catch (Exception ex) {
-            // code xử lý ngoại lệ
+        if (number > this.dsKyHan.size()) {
+            System.out.print("Khong co tai khoan ky han \nVui long nhap lai\n");
+        } else {
+            if (this.getTaiKhoanKyHan(number).tinhNgayDaoHan() != new Date(CauHinh.f.format(new Date()))) {
+                System.out.println("Nhap so tien");
+                String strMoney = CauHinh.sc.next();
+                double money = 0;
+                try {
+                    money = Integer.parseInt(strMoney);
+                } catch (Exception ex) {
+                    // code xử lý ngoại lệ
+                }
+                if (this.getTaiKhoanGuiTien().getTien() - money < 50000) {
+                    System.out.println("Tai khoan chinh phai co tu 50000VND tro len sau khi chuyen vao tai khoan!\nvui long nhap lai!");
+                } else {
+                    this.taiKhoanGuiTien.setTienGui(money, 2);
+                    this.getTaiKhoanKyHan(number).setTienGui(money, 1);
+                }
+            } else {
+                System.err.println("Tai Khoan nay chua toi ngay dao han");
+
+            }
+
         }
-        if(this.getTaiKhoanGuiTien().getTien()- money < 50000){
-            System.out.println("Tai khoan chinh phai co tu 50000VND tro len sau khi chuyen vao tai khoan!\nvui long nhap lai!");
-        }else{
-            this.taiKhoanGuiTien.setTienGui(money, 2);
-            this.dsKyHan.stream().filter(t -> t.getId().equals(number)).findFirst().empty();
-        }
+
+    }
+
+    public TaiKhoanKyHan getTaiKhoanKyHan(int id) {
+        return this.dsKyHan.stream().filter(h -> h.getId() == id).findFirst().get();
     }
 
     /**
@@ -312,10 +383,31 @@ public class TaiKhoan {
     }
 
     /**
-     * @param taiKhoanGuiTien the taiKhoanGuiTien to set
+     * @return the dsKyHan
      */
-    public void setTaiKhoanGuiTien(TaiKhoanGuiTien taiKhoanGuiTien) {
-        this.taiKhoanGuiTien = taiKhoanGuiTien;
+    public List<TaiKhoanKyHan> getDsKyHan() {
+        return dsKyHan;
+    }
+
+    /**
+     * @param dsKyHan the dsKyHan to set
+     */
+    public void setDsKyHan(List<TaiKhoanKyHan> dsKyHan) {
+        this.dsKyHan = dsKyHan;
+    }
+
+    /**
+     * @return the check
+     */
+    public boolean isCheck() {
+        return check;
+    }
+
+    /**
+     * @param check the check to set
+     */
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 
 }

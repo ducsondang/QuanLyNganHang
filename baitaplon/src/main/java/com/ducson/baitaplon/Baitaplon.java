@@ -73,7 +73,7 @@ public class Baitaplon {
                     dstk.hienThi();
                     break;
                 case "8":
-//                    dstk.sapXep();
+                    dstk.sapXep();
                     break;
                 default:
                     System.out.println("Tạm biệt");
