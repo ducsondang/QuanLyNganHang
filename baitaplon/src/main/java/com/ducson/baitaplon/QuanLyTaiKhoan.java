@@ -7,9 +7,7 @@ package com.ducson.baitaplon;
 import com.ducson.cauhinh.CauHinh;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,11 +25,11 @@ public class QuanLyTaiKhoan {
 
     private List<TaiKhoan> dsAccount = new ArrayList<>();
 
-    public void taoTaiKhoan(TaiKhoan... h) {
+    public void taoAccount(TaiKhoan... h) {
         this.dsAccount.addAll(Arrays.asList(h));
     }
 
-    public void taoTaiKhoan(int n) throws ParseException, IOException {
+    public void taoAccount(int n) throws ParseException, IOException {
         for (int i = 1; i <= n; i++) {
             System.out.printf("== Nhap tai khoan %d ==\n", i);
             TaiKhoan h = new TaiKhoan();
@@ -45,8 +43,8 @@ public class QuanLyTaiKhoan {
         }
     }
 
-    public void luuDSTaiKhoan() {
-        File f = new File("src/main/resources/taikhoan.txt");
+    public void luuDSAccount() {
+        File f = new File("src/main/resources/account.txt");
         if (f.delete()) {
             this.dsAccount.forEach(h -> {
                 try {
@@ -57,9 +55,9 @@ public class QuanLyTaiKhoan {
             });
         }
     }
-    
-    public void nhapTaiKhoanKyHan(){
-        this.dsAccount.forEach(h ->{
+
+    public void nhapTaiKhoanKyHan() {
+        this.dsAccount.forEach(h -> {
             try {
                 h.nhapTaiKhoanKyHan("src/main/resources/taikhoankyhan.txt");
             } catch (ParseException ex) {
@@ -71,48 +69,51 @@ public class QuanLyTaiKhoan {
     }
 
     public void dangNhap(String userName, String pass) throws ParseException, FileNotFoundException, IOException {
+        boolean cont = true;
         if (this.dsAccount.stream().filter(t -> t.getAccount().equals(userName)).findFirst().isEmpty() == false) {
             TaiKhoan a = this.dsAccount.stream().filter(t -> t.getAccount().equals(userName)).findFirst().get();
             if (this.dsAccount.stream().filter(t -> t.getAccount().equals(userName)).findFirst().isEmpty() == false && a.getMatKhau().equals(pass) == true) {
                 a.getTaiKhoanGuiTien().congLaiXuat(365);
                 System.out.println("Dang nhap thanh cong");
                 System.out.println("====================");
-                System.out.println("1: Doi mat khau\n2: Them tai khoan co ky han\n3: Rut Tien\n4: Xem Lai Xuat\n5: Danh Sach tai khoan ky han:\n6: Nap Tien Vao Tai Khoan ky han");
-                int numble = CauHinh.sc.nextInt();
-//                a.nhapTaiKhoanKyHan("src/main/resources/taikhoankyhan.txt");
-                switch (numble) {
-                    case 1:
-                        System.out.println("Nhap mat khau moi");
-                        a.setMatKhau(CauHinh.sc.next());
-                        luuDSTaiKhoan();
-                        System.out.println("Doi mat khau thanh cong");
-                        break;
-                    case 3:
-                        System.out.println("Nhap So Tien Rut");
-                        a.getTaiKhoanGuiTien().setTienGui(CauHinh.sc.nextDouble(), 2);
-                        luuDSTaiKhoan();
-                        System.out.println("Rut Tien Thanh Cong");
-                        break;
-                    case 2:
-                        if (a.getTaiKhoanGuiTien().getTien() < 100000) {
-                            System.out.println("Yeu cau Tai Khoan chinh phai có tren 100.000 VND");
-                        }
-                        if (a.getTaiKhoanGuiTien().getTien() > 100000) {
-                            a.moTaiKhoanKyHan();
-                        }
-                        break;
-                    case 4:
-                        System.out.printf("Tien Lai Hang Thang Cua Quy Khach La: %.1f VND\n", a.getTaiKhoanGuiTien().tinhLaiXuat());
-                        break;
-                    case 5:
-                        a.hienThiTaiKhoanKyHan();
-                        break;
-                    case 6:
-                        a.napTienVaoTKKyHan();
-                        break;
-                    default:
-                        throw new AssertionError();
-                }
+                do {
+
+                    System.out.println("1: Doi mat khau\n2: Them tai khoan co ky han\n3: Rut Tien\n4: Xem Lai Xuat\n5: Danh Sach tai khoan ky han:\n6: Nap Tien Vao Tai Khoan ky han\n7: Thoat");
+                    int numble = CauHinh.sc.nextInt();
+                    switch (numble) {
+                        case 1:
+                            System.out.println("Nhap mat khau moi");
+                            a.setMatKhau(CauHinh.sc.next());
+                            luuDSAccount();
+                            System.out.println("Doi mat khau thanh cong\n========================");
+                            break;
+                        case 3:
+                            System.out.println("Nhap So Tien Rut");
+                            a.getTaiKhoanGuiTien().setTienGui(CauHinh.sc.nextDouble(), 2);
+                            luuDSAccount();
+                            System.out.println("Rut Tien Thanh Cong");
+                            break;
+                        case 2:
+                            if (a.getTaiKhoanGuiTien().getTien() < 100000) {
+                                System.out.println("Yeu cau Tai Khoan chinh phai có tren 100.000 VND");
+                            }
+                            if (a.getTaiKhoanGuiTien().getTien() > 100000) {
+                                a.moTaiKhoanKyHan();
+                            }
+                            break;
+                        case 4:
+                            System.out.printf("Tien Lai Hang Thang Cua Quy Khach La: %.1f VND\n", a.getTaiKhoanGuiTien().tinhLaiXuat());
+                            break;
+                        case 5:
+                            a.hienThiTaiKhoanKyHan();
+                            break;
+                        case 6:
+                            a.napTienVaoTKKyHan();
+                            break;
+                        default:
+                            cont = false;
+                    }
+                } while (cont);
             } else {
                 System.out.println("USERNAME hoac PASS khong chinh xac");
             }
@@ -176,7 +177,7 @@ public class QuanLyTaiKhoan {
             }
             return 0;
         });
-        luuDSTaiKhoan();
+        luuDSAccount();
     }
 
 }

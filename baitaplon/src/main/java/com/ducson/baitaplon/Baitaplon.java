@@ -17,17 +17,17 @@ public class Baitaplon {
 
     public static void main(String[] args) throws ParseException, FileNotFoundException, IOException {
         QuanLyTaiKhoan dstk = new QuanLyTaiKhoan();
-        dstk.nhapAccount("src/main/resources/taikhoan.txt");
+        dstk.nhapAccount("src/main/resources/account.txt");
         dstk.nhapTaiKhoanKyHan();
         boolean cont = true;
-        do {
-            System.out.println("-----MENU-----\n1: Tao tai khoan\n2: Dang Nhap\n3: Tinh Tien Lai\n4: Gui rut tien\n5: Tra cuu khach hang theo ho ten\n6: Tra cuu khach hang theo ma so khach hang\n7: Danh sach tai khoan\n8: Sap xep danh sach");
+        while (cont) {
+            System.out.println("-----MENU-----\n1: Tao tai khoan\n2: Dang Nhap\n3: Tinh Tien Lai\n4: Gui rut tien\n5: Tra cuu khach hang theo ho ten\n6: Tra cuu khach hang theo ma so khach hang\n7: Danh sach tai khoan\n8: Sap xep danh sach\n9: Thoat\n");
             String chon = CauHinh.sc.nextLine();
             switch (chon) {
                 case "1":
                     System.out.print("so luong tai khoan muon tao: ");
                     int numble = CauHinh.sc.nextInt();
-                    dstk.taoTaiKhoan(numble);
+                    dstk.taoAccount(numble);
                     break;
                 case "2":
                     System.out.println("Nhap USERNAME:\nNhap PASS:");
@@ -49,13 +49,13 @@ public class Baitaplon {
                         System.out.println("nhap so tien: ");
                         double tien = CauHinh.sc.nextDouble();
                         dstk.guiRutTien(Tk, tien, 2);
-                        dstk.luuDSTaiKhoan();
+                        dstk.luuDSAccount();
                     }
                     if (rutGui == 2) {
                         System.out.println("nhap so tien: ");
                         double tien = CauHinh.sc.nextDouble();
                         dstk.guiRutTien(Tk, tien, 1);
-                        dstk.luuDSTaiKhoan();
+                        dstk.luuDSAccount();
                     } else {
                         System.out.println("chon sai vui long chon lai!");
                     }
@@ -77,9 +77,9 @@ public class Baitaplon {
                     dstk.sapXep();
                     break;
                 default:
-                    System.out.println("Tạm biệt");
+//                    cont = false;
                     break;
             }
-        } while (cont);
+        }
     }
 }

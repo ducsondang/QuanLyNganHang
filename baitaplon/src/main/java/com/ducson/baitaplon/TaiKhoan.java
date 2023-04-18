@@ -181,7 +181,7 @@ public class TaiKhoan {
      *
      */
     public void saveAccount() throws IOException {
-        File f = new File("src/main/resources/taikhoan.txt");
+        File f = new File("src/main/resources/account.txt");
         FileWriter w = new FileWriter(f, true);
         try ( PrintWriter t = new PrintWriter(w)) {
             t.println(this.getId());

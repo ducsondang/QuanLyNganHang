@@ -29,7 +29,7 @@ public abstract class TaiKhoanKyHan extends TaiKhoanGuiTien {
      */
     public abstract Date tinhNgayDaoHan();
 
-    public void LuuTaiKhoan() throws IOException {
+    public void luuTaiKhoan() throws IOException {
         File f = new File("src/main/resources/taikhoankyhan.txt");
         FileWriter w = new FileWriter(f, true);
         try ( PrintWriter t = new PrintWriter(w)) {
@@ -43,7 +43,9 @@ public abstract class TaiKhoanKyHan extends TaiKhoanGuiTien {
     }
 
     public void hienThi() {
-        System.out.printf("ID: %s\nID Account: %s\nKy Han: %s\nLai Xuat: %s\nSo Tien: %sVND\nNgay Dao Han : %s\n", this.getId(), this.idAccount, this.getKyHan(), this.getLai(), this.getTien(), CauHinh.f.format(this.tinhNgayDaoHan()));
+        System.out.printf("ID: %s\nID Account: %s\nKy Han: %s\nLai Xuat: %s\nSo Tien: %sVND\nNgay Dao Han : %s\n", 
+                this.getId(), this.getIdAccount(), this.getKyHan(), this.getLai(),
+                this.getTien(), CauHinh.f.format(this.tinhNgayDaoHan()));
     }
 
     /**

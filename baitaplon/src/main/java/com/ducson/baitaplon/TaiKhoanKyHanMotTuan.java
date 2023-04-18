@@ -18,7 +18,7 @@ public class TaiKhoanKyHanMotTuan extends TaiKhoanKyHan{
     public TaiKhoanKyHanMotTuan(int dem,String idAccout) throws IOException{
         super.setId(dem + 1);
         super.setIdAccount(idAccout);
-        this.LuuTaiKhoan();
+        this.luuTaiKhoan();
     }
     public TaiKhoanKyHanMotTuan(int ID,String idAccount,double tien,double lai, String kyHan,String ngayTao) throws ParseException, IOException{
         super.setId(ID);
