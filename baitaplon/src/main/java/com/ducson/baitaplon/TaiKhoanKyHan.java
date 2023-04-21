@@ -19,7 +19,7 @@ public abstract class TaiKhoanKyHan extends TaiKhoanGuiTien {
 
     private int id;
     private Date ngayTao = new Date();
-    private String kyHan;
+    private int kyHan;
     private String idAccount;
 
     /**
@@ -43,22 +43,29 @@ public abstract class TaiKhoanKyHan extends TaiKhoanGuiTien {
     }
 
     public void hienThi() {
-        System.out.printf("ID: %s\nID Account: %s\nKy Han: %s\nLai Xuat: %s\nSo Tien: %sVND\nNgay Dao Han : %s\n", 
+        System.out.printf("================\nID: %s\nID Account: %s\nKy Han: %s Ngay\nLai Xuat: %s/Nam\nSo Tien: %.1fVND\nNgay Dao Han : %s\nTien lai sau khi het ky han: %.1fVND\n", 
                 this.getId(), this.getIdAccount(), this.getKyHan(), this.getLai(),
-                this.getTien(), CauHinh.f.format(this.tinhNgayDaoHan()));
+                this.getTien(), CauHinh.f.format(this.tinhNgayDaoHan()), this.tinhLaiXuat());
     }
-
+    
+    public double tinhLaiXuat() {
+        return this.getTien() / 100 * this.getLai()/365 * this.kyHan;
+    }
+    
+    public double tinhLaiXuat(double money) {
+        return money / 100 * this.getLai()/365 * this.kyHan;
+    }
     /**
      * @return the kyHan
      */
-    public String getKyHan() {
+    public int getKyHan() {
         return kyHan;
     }
 
     /**
      * @param kyHan the kyHan to set
      */
-    public void setKyHan(String kyHan) {
+    public void setKyHan(int kyHan) {
         this.kyHan = kyHan;
     }
 

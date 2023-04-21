@@ -4,6 +4,7 @@
  */
 package com.ducson.baitaplon;
 
+import com.ducson.cauhinh.CauHinh;
 import java.util.Date;
 
 /**
@@ -15,6 +16,7 @@ public class TaiKhoanGuiTien {
     private double tien = 0;
     private double lai;
     private Date ngayTao = new Date();
+    private Date ngayCapNhatLai = ngayTao;
 
     /**
      * @return the tien
@@ -22,7 +24,8 @@ public class TaiKhoanGuiTien {
     public double getTien() {
         return tien;
     }
-    public TaiKhoanGuiTien(){
+
+    public TaiKhoanGuiTien() {
         this.setLai(0.2);
     }
 
@@ -39,7 +42,6 @@ public class TaiKhoanGuiTien {
         if (a == 1) {
             this.tien += tienGui;
         }
-
     }
 
     /**
@@ -48,22 +50,27 @@ public class TaiKhoanGuiTien {
     public double getLai() {
         return lai;
     }
-
-    public double tinhLaiXuat() {
-        return this.getTien() / 100 * this.getLai();
-    }
     /**
-     * ???
+     * tính lãi xuất theo ngày với kỳ hạn 0.2%/nam
+     * ngayHan số ngày tính lãi.
+     */
+    public double tinhLaiXuat(int ngayHan) {
+        return this.getTien() / 100 * this.getLai()/365 * ngayHan;
+    }
+
+    /**
+     * cộng tiền lãi vào tài khoản khi đủ ngày han là ngày lãi
      */
     public double congLaiXuat(int han) {
-        if ((new Date().getTime() - this.getNgayTao().getTime()) / (24 * 3600 * 1000) >= han) {
+        if ((new Date().getTime() - this.getNgayCapNhatLai().getTime()) / (24 * 3600 * 1000) >= han) {
             int h = (int) (((new Date().getTime() - this.getNgayTao().getTime()) / (24 * 3600 * 1000)) / han);
-            double money = 0;
             for (int i = 1; i <= h; i++) {
-                money = this.getTien() + this.tinhLaiXuat();
+                this.setTienGui(this.tinhLaiXuat(365), 1);
             }
-            return money;
+            this.setNgayCapNhatLai(new Date());
+            return this.getTien();
         } else {
+            this.setNgayCapNhatLai(new Date());
             return this.getTien();
         }
 
@@ -90,5 +97,18 @@ public class TaiKhoanGuiTien {
         this.ngayTao = ngayTao;
     }
 
+    /**
+     * @return the ngayCapNhatLai
+     */
+    public Date getNgayCapNhatLai() {
+        return ngayCapNhatLai;
+    }
+
+    /**
+     * @param ngayCapNhatLai the ngayCapNhatLai to set
+     */
+    public void setNgayCapNhatLai(Date ngayCapNhatLai) {
+        this.ngayCapNhatLai = ngayCapNhatLai;
+    }
 
 }

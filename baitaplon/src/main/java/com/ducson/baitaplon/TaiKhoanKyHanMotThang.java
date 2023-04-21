@@ -22,7 +22,7 @@ public class TaiKhoanKyHanMotThang extends TaiKhoanKyHan {
         this.luuTaiKhoan();
     }
 
-    public TaiKhoanKyHanMotThang(int ID, String idAccount, double tien, double lai, String kyHan, String ngayTao) throws ParseException, IOException {
+    public TaiKhoanKyHanMotThang(int ID, String idAccount, double tien, double lai, int kyHan, String ngayTao) throws ParseException, IOException {
         super.setId(ID);
         super.setIdAccount(idAccount);
         super.setTienGui(tien, 0);
@@ -34,7 +34,7 @@ public class TaiKhoanKyHanMotThang extends TaiKhoanKyHan {
     @Override
     public void setLai(double lai) {
         super.setLai(5.5);
-        super.setKyHan("1Thang");
+        super.setKyHan(30);
     }
 
     @Override

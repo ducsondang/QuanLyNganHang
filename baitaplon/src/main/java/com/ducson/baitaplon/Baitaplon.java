@@ -26,8 +26,14 @@ public class Baitaplon {
             switch (chon) {
                 case "1":
                     System.out.print("so luong tai khoan muon tao: ");
-                    int numble = CauHinh.sc.nextInt();
-                    dstk.taoAccount(numble);
+                    int numble = 0;
+                    String numbleSLTaiKhoan = CauHinh.sc.next();
+                    try {
+                        numble = Integer.parseInt(numbleSLTaiKhoan);
+                        dstk.taoAccount(numble);
+                    } catch (Exception e) {
+                        System.out.println("nhap sai vui long nhap lai");
+                    }
                     break;
                 case "2":
                     System.out.println("Nhap USERNAME:\nNhap PASS:");
@@ -38,16 +44,28 @@ public class Baitaplon {
                 case "3":
                     System.out.println("Nhap Tai Khoan");
                     String tk = CauHinh.sc.next();
-                    System.out.printf("Lai Xuat Hang Thang Cua Tai Khoan %s\n%.1f VND\n", dstk.timKiemTheoTaiKhoan(tk).getAccount(), dstk.timKiemTheoTaiKhoan(tk).getTaiKhoanGuiTien().tinhLaiXuat());
+                    System.out.printf("Lai Xuat Hang Thang Cua Tai Khoan %s\n%.1f VND\n", dstk.timKiemTheoTaiKhoan(tk).getAccount(), dstk.timKiemTheoTaiKhoan(tk).getTaiKhoanGuiTien().tinhLaiXuat(30));
                     break;
                 case "4":
                     System.out.println("Nhap Tai Khoan");
                     String Tk = CauHinh.sc.next();
                     System.out.println("1: Rut Tien\n2: Gui tien");
-                    int rutGui = CauHinh.sc.nextInt();
+                    int rutGui = 0;
+                    String rutGuiInput = CauHinh.sc.next();
+                    try {
+                        rutGui = Integer.parseInt(rutGuiInput);
+                    } catch (Exception e) {
+                        System.out.println("nhap sai vui long nhap lai");
+                    }
                     if (rutGui == 1) {
                         System.out.println("nhap so tien: ");
-                        double tien = CauHinh.sc.nextDouble();
+                        double tien = 0;
+                        String tienInput = CauHinh.sc.next();
+                        try {
+                            tien = Double.parseDouble(tienInput);
+                        } catch (Exception e) {
+                            System.out.println("Nhap sai vui long nhap lai!");
+                        }
                         dstk.guiRutTien(Tk, tien, 2);
                         dstk.luuDSAccount();
                     }
@@ -63,7 +81,7 @@ public class Baitaplon {
                 case "5":
                     System.out.print("Nhap ten can tim: ");
                     String nameSearch = CauHinh.sc.nextLine();
-                    dstk.timKiemTheoTen(nameSearch);
+                    dstk.timKiemTheoTen(nameSearch).forEach(h -> h.hienThi());
                     break;
                 case "6":
                     System.out.println("nhap ma so khach hang: ");

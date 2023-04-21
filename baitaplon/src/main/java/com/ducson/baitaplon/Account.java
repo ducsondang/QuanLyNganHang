@@ -49,7 +49,7 @@ public class Account {
         setDem(getDem() + 1);
     }
 
-    public Account(String id, String ten, String gioiTinh, String taiKhoan, String ngaySinh, String Que, int CCCD, double tien, String passwork, String ngay) throws ParseException {
+    public Account(String id, String ten, String gioiTinh, String taiKhoan, String ngaySinh, String Que, int CCCD, double tien, String passwork, String ngay, String ngayCapNhatLai) throws ParseException {
         this.taiKhoanGuiTien = new TaiKhoanGuiTien();
         taiKhoanGuiTien.setTienGui(tien, 0);
         taiKhoanGuiTien.setLai(0.2);
@@ -62,6 +62,7 @@ public class Account {
         this.matKhau = passwork;
         this.account = taiKhoan;
         this.taiKhoanGuiTien.setNgayTao(CauHinh.f.parse(ngay));
+        this.taiKhoanGuiTien.setNgayCapNhatLai(CauHinh.f.parse(ngayCapNhatLai));
     }
 
     public Account() {
@@ -76,7 +77,7 @@ public class Account {
         try {
             ngaySinh = CauHinh.f.parse(ngay);
         } catch (Exception ex) {
-            // code xử lý ngoại lệ
+            System.out.println("Nhap sai dinh dang ngay sinh");
         }
         this.setNgaySinh(ngaySinh);
         System.out.print("Gioi Tinh: ");
@@ -86,17 +87,32 @@ public class Account {
         System.out.print("Tai khoan: ");
         this.setAccount(CauHinh.sc.next());
         System.out.print("CCCD: ");
-        this.setCCCD(CauHinh.sc.nextInt());
+        this.setCCCD(0);
+        String intCccd = CauHinh.sc.next();
+        try {
+            this.setCCCD(Integer.parseInt(intCccd));
+        } catch (Exception ex) {
+            System.out.println("Nhap sai dinh dang CCCD");
+        }
         System.out.print("Tien Gui(VND): ");
-        taiKhoanGuiTien.setTienGui(CauHinh.sc.nextInt(), 0);
+        taiKhoanGuiTien.setTienGui(0, 0);
+        double intTien = CauHinh.sc.nextDouble();
+        try {
+            taiKhoanGuiTien.setTienGui(intTien, 0);
+        } catch (Exception ex) {
+            System.out.println("Nhap sai dinh dang tien");
+        }
         this.taiKhoanGuiTien.setNgayTao(new Date());
         this.setId((CauHinh.f.format(this.taiKhoanGuiTien.getNgayTao()) + this.soThuTu).replaceAll("/", ""));
+        this.taiKhoanGuiTien.setNgayCapNhatLai(new Date());
         this.setMatKhau(Integer.toString((new Random()).nextInt(999999)));
     }
 
     public void hienThi() {
         System.out.println("=======================");
-        System.out.printf("ID: %s\nHo va ten: %s\nNgay Sinh: %s\nTai Khoan: %s\nSo tien tai khoan thanh toan: %.1f VND\nTong tien: %.1f VND\n", this.getId(), this.getHoTen(), CauHinh.f.format(this.getNgaySinh()), this.getAccount(), this.getTaiKhoanGuiTien().getTien(),this.tinhTongTien());
+        System.out.printf("ID: %s\nHo va ten: %s\nNgay Sinh: %s\nTai Khoan: %s\nSo tien tai khoan thanh toan: %.1f VND\nTong tien: %.1f VND\n",
+                this.getId(), this.getHoTen(), CauHinh.f.format(this.getNgaySinh()),
+                this.getAccount(), this.getTaiKhoanGuiTien().getTien(), this.tinhTongTien());
     }
 
     public void moTaiKhoanKyHan() throws IOException {
@@ -127,6 +143,19 @@ public class Account {
             System.out.println("Nhap sai vui long nhap lai");
         }
     }
+    
+    public void luuDSTaiKhoanKyHan() {
+        File n = new File("src/main/resources/taikhoankyahan.txt");
+        if (n.delete()) {
+            this.dsKyHan.forEach(h -> {
+                try {
+                    h.luuTaiKhoan();
+                } catch (IOException ex) {
+                    System.out.println("Loi khong luu duoc tai khoan");
+                }
+            });
+        }
+    }
     /**
      * lấy dữ liệu tài khoản kỳ hạn từ file taikhoankyhan.txt
      */
@@ -139,7 +168,7 @@ public class Account {
                     String idAccount = sc.next();
                     double tien = sc.nextDouble();
                     double lai = sc.nextDouble();
-                    String kyHan = sc.next();
+                    int kyHan = sc.nextInt();
                     String ngayTao = sc.next();
                     if (sc.hasNext()) {
                         sc.nextLine();
@@ -176,8 +205,9 @@ public class Account {
             this.getDsKyHan().forEach(a -> a.hienThi());
         }
     }
+
     /**
-     * 
+     *
      *
      */
     public void saveAccount() throws IOException {
@@ -194,6 +224,7 @@ public class Account {
             t.println(this.getTaiKhoanGuiTien().getTien());
             t.println(this.getMatKhau());
             t.println(CauHinh.f.format(this.taiKhoanGuiTien.getNgayTao()));
+            t.println(CauHinh.f.format(this.taiKhoanGuiTien.getNgayCapNhatLai()));
         }
     }
 
@@ -206,55 +237,123 @@ public class Account {
         System.out.println("Nhap ID Tai Khoan ky han");
         String strId = CauHinh.sc.next();
         int number = 0;
-        System.out.println(new Date(CauHinh.f.format(new Date())));
         try {
             number = Integer.parseInt(strId);
         } catch (Exception ex) {
-            // code xử lý ngoại lệ
+            System.out.println("Nhap sai vui long nhap lai!");
         }
         if (number > this.dsKyHan.size()) {
             System.out.print("Khong co tai khoan ky han \nVui long nhap lai\n");
         } else {
-            if (this.getTaiKhoanKyHan(number).tinhNgayDaoHan() != new Date(CauHinh.f.format(new Date()))) {
+            // kiểm tra ngày đầu tiên tạo tài khoản
+            if ((new Date().getTime() - this.getTaiKhoanKyHan(number).getNgayTao().getTime()) / (24 * 1000 * 3600) == 0) {
                 System.out.println("Nhap so tien");
                 String strMoney = CauHinh.sc.next();
                 double money = 0;
                 try {
                     money = Integer.parseInt(strMoney);
                 } catch (Exception ex) {
-                    // code xử lý ngoại lệ
+                    System.out.println("Nhap sai vui long nhap lai!");
                 }
                 if (this.getTaiKhoanGuiTien().getTien() - money < 50000) {
                     System.out.println("Tai khoan chinh phai co tu 50000VND tro len sau khi chuyen vao tai khoan!\nvui long nhap lai!");
                 } else {
                     this.taiKhoanGuiTien.setTienGui(money, 2);
                     this.getTaiKhoanKyHan(number).setTienGui(money, 1);
+                    System.out.printf("Nap tien vao tai khoan ID: %s thanh cong\n", this.getTaiKhoanKyHan(number).getId());
                 }
-            } else {
+            // kiểm tra có phải là ngày đáo hạn hay không
+            }if ((new Date().getTime() - this.getTaiKhoanKyHan(number).tinhNgayDaoHan().getTime()) / (24 * 1000 * 3600) == 0) {
+                System.out.println("Nhap so tien");
+                String strMoney = CauHinh.sc.next();
+                double money = 0;
+                try {
+                    money = Integer.parseInt(strMoney);
+                } catch (Exception ex) {
+                    System.out.println("Nhap sai vui long nhap lai!");
+                }
+                if (this.getTaiKhoanGuiTien().getTien() - money < 50000) {
+                    System.out.println("Tai khoan chinh phai co tu 50000VND tro len sau khi chuyen vao tai khoan!\nvui long nhap lai!");
+                } else {
+                    this.taiKhoanGuiTien.setTienGui(money, 2);
+                    this.getTaiKhoanKyHan(number).setTienGui(money, 1);
+                    System.out.printf("Nap tien vao tai khoan ID: %s thanh cong\n", this.getTaiKhoanKyHan(number).getId());
+                }
+            }if((new Date().getTime() - this.getTaiKhoanKyHan(number).tinhNgayDaoHan().getTime()) 
+                    / (24 * 1000 * 3600) != 0 
+                    && (new Date().getTime() - this.getTaiKhoanKyHan(number).getNgayTao().getTime()) 
+                    / (24 * 1000 * 3600) != 0) {
                 System.out.println("Tai Khoan nay chua toi ngay dao han");
 
             }
-
         }
+        this.luuDSTaiKhoanKyHan();
 
     }
-    
-    public double tinhTongTien(){
+
+    public void rutTienTaiKhoanKyhan() {
+        System.out.println("Nhap ID Tai Khoan ky han");
+        String strId = CauHinh.sc.next();
+        int number = 0;
+        try {
+            number = Integer.parseInt(strId);
+        } catch (Exception ex) {
+            System.out.println("Nhap sai vui long nhap lai!");
+        }
+        if (number > this.dsKyHan.size()) {
+            System.out.print("Khong co tai khoan ky han \nVui long nhap lai\n");
+        } else {
+            System.out.println("Nhap so tien");
+            String strMoney = CauHinh.sc.next();
+            double money = 0;
+            try {
+                money = Integer.parseInt(strMoney);
+            } catch (Exception ex) {
+                System.out.println("Nhap sai vui long nhap lai!");
+            }
+            if ((new Date().getTime() - this.getTaiKhoanKyHan(number).tinhNgayDaoHan().getTime()) / (24 * 1000 * 3600) == 0) {
+                if (this.getTaiKhoanKyHan(number).getTien() < money) {
+                    System.out.println("Nhap qua so tien hien co!\nvui long nhap lai!");
+                } else {
+                    this.taiKhoanGuiTien.setTienGui(this.getTaiKhoanKyHan(number).tinhLaiXuat(money) + money, 1);
+                    this.getTaiKhoanKyHan(number).setTienGui(this.getTaiKhoanKyHan(number).tinhLaiXuat(money) + money, 2);
+                    System.out.printf("Rut tien vao tai khoan thanh cong\n");
+                }
+            } else {
+                System.out.println("Tai Khoan nay chua toi ngay dao han! bạn có chắc muốn rút với số tiền lãi 0.2%?\n1: CO\n2: KHONG");
+                int a = 0;
+                String numberChon = CauHinh.sc.next();
+                try {
+                    a = Integer.parseInt(numberChon);
+                } catch (Exception e) {
+                    System.out.println("Nhap sai vui long nhap lai");
+                }
+                if (a == 1) {
+                    this.getTaiKhoanKyHan(number).setTienGui(this.getTaiKhoanKyHan(number).getTien() + this.getTaiKhoanKyHan(number).tinhLaiXuat((int) ((new Date().getTime() - this.getTaiKhoanKyHan(number).tinhNgayDaoHan().getTime()) / (24 * 1000 * 3600))), 2);
+                    this.taiKhoanGuiTien.setTienGui(this.getTaiKhoanKyHan(number).getTien() + this.getTaiKhoanKyHan(number).tinhLaiXuat((int) ((new Date().getTime() - this.getTaiKhoanKyHan(number).tinhNgayDaoHan().getTime()) / (24 * 1000 * 3600))), 1);
+                }
+            }
+        }
+        luuDSTaiKhoanKyHan();
+    }
+
+    public double tinhTongTien() {
         double a = 0;
-        for(int i =0; i <this.getDsKyHan().size();i++){
+        for (int i = 0; i < this.getDsKyHan().size(); i++) {
             a += this.getDsKyHan().get(i).getTien();
         }
-        return this.getTaiKhoanGuiTien().getTien()+ a;
+        return this.getTaiKhoanGuiTien().getTien() + a;
     }
 
+    /**
+     * trả về tài khoản kỳ hạn
+     *
+     * @param id của tài khoản kỳ hạn
+     */
     public TaiKhoanKyHan getTaiKhoanKyHan(int id) {
         return this.dsKyHan.stream().filter(h -> h.getId() == id).findFirst().get();
     }
 
-    /**
-     * @param tienGui the tienGui to set
-     * @param a
-     */
     /**
      * @return the dem
      */
@@ -432,5 +531,4 @@ public class Account {
     public void setCheck(boolean check) {
         this.check = check;
     }
-
 }
