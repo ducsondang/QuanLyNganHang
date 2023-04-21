@@ -23,16 +23,16 @@ import java.util.stream.Collectors;
  */
 public class QuanLyTaiKhoan {
 
-    private List<TaiKhoan> dsAccount = new ArrayList<>();
+    private List<Account> dsAccount = new ArrayList<>();
 
-    public void taoAccount(TaiKhoan... h) {
+    public void taoAccount(Account... h) {
         this.dsAccount.addAll(Arrays.asList(h));
     }
 
     public void taoAccount(int n) throws ParseException, IOException {
         for (int i = 1; i <= n; i++) {
             System.out.printf("== Nhap tai khoan %d ==\n", i);
-            TaiKhoan h = new TaiKhoan();
+            Account h = new Account();
             if (this.dsAccount.stream().filter(u -> u.getAccount().equals(h.getAccount())).findFirst().isEmpty() == false) {
                 System.out.println("UserName da co nguoi su dung!\nVui long cung cap UserName khac");
             } else {
@@ -71,7 +71,7 @@ public class QuanLyTaiKhoan {
     public void dangNhap(String userName, String pass) throws ParseException, FileNotFoundException, IOException {
         boolean cont = true;
         if (this.dsAccount.stream().filter(t -> t.getAccount().equals(userName)).findFirst().isEmpty() == false) {
-            TaiKhoan a = this.dsAccount.stream().filter(t -> t.getAccount().equals(userName)).findFirst().get();
+            Account a = this.dsAccount.stream().filter(t -> t.getAccount().equals(userName)).findFirst().get();
             if (this.dsAccount.stream().filter(t -> t.getAccount().equals(userName)).findFirst().isEmpty() == false && a.getMatKhau().equals(pass) == true) {
                 a.getTaiKhoanGuiTien().congLaiXuat(365);
                 System.out.println("Dang nhap thanh cong");
@@ -131,15 +131,15 @@ public class QuanLyTaiKhoan {
         this.dsAccount.forEach(h -> h.hienThi());
     }
 
-    public TaiKhoan timKiemTheoId(String id) {
+    public Account timKiemTheoId(String id) {
         return this.dsAccount.stream().filter(h -> h.getId().equals(id)).findFirst().get();
     }
 
-    public TaiKhoan timKiemTheoTaiKhoan(String tk) {
+    public Account timKiemTheoTaiKhoan(String tk) {
         return this.dsAccount.stream().filter(h -> h.getAccount().equals(tk)).findFirst().get();
     }
 
-    public List<TaiKhoan> timKiemTheoTen(String kw) {
+    public List<Account> timKiemTheoTen(String kw) {
         return this.dsAccount.stream().filter(h -> h.getHoTen().contains(kw)).collect(Collectors.toList());
     }
 
@@ -160,7 +160,7 @@ public class QuanLyTaiKhoan {
                 if (sc.hasNext()) {
                     sc.nextLine();
                 }
-                TaiKhoan h = new TaiKhoan(id, name, gioiTinh, taiKhoan, namSinh, que, CCCD, money, pass, ngayTao);
+                Account h = new Account(id, name, gioiTinh, taiKhoan, namSinh, que, CCCD, money, pass, ngayTao);
                 this.dsAccount.add(h);
             }
         }

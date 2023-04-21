@@ -21,7 +21,7 @@ import java.util.Scanner;
  *
  * @author khach
  */
-public class TaiKhoan {
+public class Account {
 
     private static int dem = 1;
     private String soThuTu;
@@ -49,7 +49,7 @@ public class TaiKhoan {
         setDem(getDem() + 1);
     }
 
-    public TaiKhoan(String id, String ten, String gioiTinh, String taiKhoan, String ngaySinh, String Que, int CCCD, double tien, String passwork, String ngay) throws ParseException {
+    public Account(String id, String ten, String gioiTinh, String taiKhoan, String ngaySinh, String Que, int CCCD, double tien, String passwork, String ngay) throws ParseException {
         this.taiKhoanGuiTien = new TaiKhoanGuiTien();
         taiKhoanGuiTien.setTienGui(tien, 0);
         taiKhoanGuiTien.setLai(0.2);
@@ -64,7 +64,7 @@ public class TaiKhoan {
         this.taiKhoanGuiTien.setNgayTao(CauHinh.f.parse(ngay));
     }
 
-    public TaiKhoan() {
+    public Account() {
         this.taiKhoanGuiTien = new TaiKhoanGuiTien();
         taiKhoanGuiTien.setLai(0.2);
         CauHinh.sc.nextLine();
@@ -231,7 +231,7 @@ public class TaiKhoan {
                     this.getTaiKhoanKyHan(number).setTienGui(money, 1);
                 }
             } else {
-                System.err.println("Tai Khoan nay chua toi ngay dao han");
+                System.out.println("Tai Khoan nay chua toi ngay dao han");
 
             }
 
